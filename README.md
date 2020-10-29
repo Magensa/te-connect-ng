@@ -1,14 +1,16 @@
 # TEConnect Angular Component
+[![npm version](https://img.shields.io/npm/v/@magensa/te-connect-ng.svg?style=for-the-badge)](https://www.npmjs.com/package/@magensa/te-connect-ng "@magensa/te-connect-ng npm.js")  
+
 Angular component for use with Token Exchange Connect utility.  
 TypeScript Type Defs are exposed, and can be imported from this module as well.  
 
 # Getting Started
 ```
-npm install te-connect te-connect-ng
+npm install @magensa/te-connect @magensa/te-connect-ng
 ```
 or
 ```
-yarn add te-connnect te-connect-ng
+yarn add @magensa/te-connnect @magensa/te-connect-ng
 ```
 
 If you would prefer to let the code speak, below we have an [example implementation](#-Example-Implementation)
@@ -17,12 +19,12 @@ If you would prefer to let the code speak, below we have an [example implementat
 ```typescript
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { TeConnectNgModule, CreatePaymentResponse, StylesConfig, TEConnect } from 'te-connect-ng';
-import { createTEConnect } from 'te-connect'
+import { TeConnectNgModule, CreatePaymentResponse, StylesConfig, TEConnect } from '@magensa/te-connect-ng';
+import { createTEConnect } from '@magensa/te-connect'
 
 import { AppComponent } from './app.component';
 
-const TE_CONNECT: TEConnect = createTEConnect("Y2xpZW50VG9rZW5Qb2NDb2RlL2NsaWVudFRva2VuUG9jVXNlcjpQYXNzd29yZDEh");
+const TE_CONNECT: TEConnect = createTEConnect("__publicKeyGoesHere__");
 
 @NgModule({
   declarations: [AppComponent],
@@ -39,7 +41,7 @@ export class AppModule { }
 2. Next, in your component, define the library markup, and a handler to receive the response of the ```createPayment``` method:  
 ```typescript
 import { Component } from '@angular/core';
-import { CreatePaymentResponse } from 'te-connect-ng';
+import { CreatePaymentResponse } from '@magensa/te-connect-ng';
 
 @Component({
   selector: 'app-root',
@@ -167,12 +169,12 @@ Below we have the complete API with examples of default values for each.
 ```typescript
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { TeConnectNgModule, CreatePaymentResponse } from 'te-connect-ng';
-import { createTEConnect } from 'te-connect'
+import { TeConnectNgModule, CreatePaymentResponse } from '@magensa/te-connect-ng';
+import { createTEConnect } from '@magensa/te-connect'
 
 import { AppComponent } from './app.component';
 
-const TE_CONNECT: TEConnect = createTEConnect("Y2xpZW50VG9rZW5Qb2NDb2RlL2NsaWVudFRva2VuUG9jVXNlcjpQYXNzd29yZDEh");
+const TE_CONNECT: TEConnect = createTEConnect("__publicKeyGoesHere__");
 
 @NgModule({
   declarations: [AppComponent],
@@ -190,7 +192,7 @@ export class AppModule { }
 ```app.component.ts```  
 ```typescript
 import { Component } from '@angular/core';
-import { CreatePaymentResponse, StylesConfig } from 'te-connect-ng';
+import { CreatePaymentResponse, StylesConfig } from '@magensa/te-connect-ng';
 
 @Component({
   selector: 'app-root',
@@ -256,12 +258,12 @@ If you prefer to gather the customer's billing zip from your form, you may choos
 ```typescript
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { TeConnectNgModule, CreatePaymentResponse } from 'te-connect-ng';
-import { createTEConnect } from 'te-connect'
+import { TeConnectNgModule, CreatePaymentResponse } from '@magensa/te-connect-ng';
+import { createTEConnect } from '@magensa/te-connect'
 
 import { AppComponent } from './app.component';
 
-const TE_CONNECT: TEConnect = createTEConnect("Y2xpZW50VG9rZW5Qb2NDb2RlL2NsaWVudFRva2VuUG9jVXNlcjpQYXNzd29yZDEh", { hideZip: true });
+const TE_CONNECT: TEConnect = createTEConnect("__publicKeyGoesHere__", { hideZip: true });
 
 @NgModule({
   declarations: [AppComponent],
@@ -279,7 +281,7 @@ export class AppModule { }
 ```app.component.ts``` 
 ```typescript
 import { Component } from '@angular/core';
-import { CreatePaymentResponse, StylesConfig } from 'te-connect-ng';
+import { CreatePaymentResponse, StylesConfig } from '@magensa/te-connect-ng';
 
 @Component({
   selector: 'app-root',
