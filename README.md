@@ -13,7 +13,7 @@ or
 yarn add @magensa/te-connnect @magensa/te-connect-ng
 ```
 
-If you would prefer to let the code speak, below we have an [example implementation](#-Example-Implementation)
+If you would prefer to let the code speak, below we have an [example implementation](#Example-Implementation)
 
 1. The first step is to create a ```TEConnect``` instance with your public key. Feed that instance into the ```TEConnectModuleNg``` where you are importing it:  
 ```typescript
@@ -64,8 +64,8 @@ export class AppComponent {
 ```  
 
 3. The above is a minimal example, and will get you started right away. There are additional configuration options, such as:  
-  - [Custom Styles configuration](#-Styles-API)
-  - [Optional Billing ZIP Code](#-Example-Implementation-NoZip)
+  - [Custom Styles configuration](#Styles-API)
+  - [Optional Billing ZIP Code](#Example-Implementation-NoZip)
 
 
 # createPayment Return Objects
