@@ -19,7 +19,7 @@ If you would prefer to let the code speak, below we have an [example implementat
 ```typescript
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { TeConnectNgModule, CreatePaymentResponse, StylesConfig, TEConnect } from '@magensa/te-connect-ng';
+import { TeConnectNgModule } from '@magensa/te-connect-ng';
 import { createTEConnect } from '@magensa/te-connect'
 
 import { AppComponent } from './app.component';
@@ -65,7 +65,7 @@ export class AppComponent {
 
 3. The above is a minimal example, and will get you started right away. There are additional configuration options, such as:  
   - [Custom Styles configuration](#-Styles-API)
-  - [Provide your own zip](#-Example-Implementation-NoZip)
+  - [Optional Billing ZIP Code](#-Example-Implementation-NoZip)
 
 
 # createPayment Return Objects
@@ -169,7 +169,7 @@ Below we have the complete API with examples of default values for each.
 ```typescript
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { TeConnectNgModule, CreatePaymentResponse } from '@magensa/te-connect-ng';
+import { TeConnectNgModule } from '@magensa/te-connect-ng';
 import { createTEConnect } from '@magensa/te-connect'
 
 import { AppComponent } from './app.component';
@@ -252,17 +252,18 @@ export class AppComponent {
 
   
 # Example Implementation NoZip  
-If you prefer to gather the customer's billing zip from your form, you may choose to do so. Be aware that the call to ```createPayment``` will check that a zip either exists in the input box - or that it is provided in the call. If no zip is provided, the call will return with an error.  
+You may choose to hide the "ZIP Code" input field upon creating a TEConnect instance. Once the field is hidden - ```billingZip``` becomes an optional parameter to the ```createPayment``` function.  If you would still like the Payment Token created to include a billingZip - you may supply your own value (as demonstrated below). You may also choose to omit the zip code completely, and the payment token will be created without a billing ZIP code.  
 
 ```app.module.ts```  
 ```typescript
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { TeConnectNgModule, CreatePaymentResponse } from '@magensa/te-connect-ng';
+import { TeConnectNgModule } from '@magensa/te-connect-ng';
 import { createTEConnect } from '@magensa/te-connect'
 
 import { AppComponent } from './app.component';
 
+//The form will not contain a ZIP Code input field with this option.
 const TE_CONNECT: TEConnect = createTEConnect("__publicKeyGoesHere__", { hideZip: true });
 
 @NgModule({
@@ -298,6 +299,8 @@ import { CreatePaymentResponse, StylesConfig } from '@magensa/te-connect-ng';
 })
 export class AppComponent {
   title = 'te-connect-example';
+
+  //You may optionally supply a billing ZIP Code if desired - otherwise simply call the function without a parameter.
   customerZip = "90025";
 
   //Custom Styles are optional.
