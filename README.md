@@ -19,7 +19,7 @@ If you would prefer to let the code speak, below we have an [example implementat
 ```typescript
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { TeConnectNgModule } from '@magensa/te-connect-ng';
+import { TeConnectNgModule, TEConnect } from '@magensa/te-connect-ng';
 import { createTEConnect } from '@magensa/te-connect'
 
 import { AppComponent } from './app.component';
@@ -60,6 +60,7 @@ export class AppComponent {
 
   handleTEResponse( response: CreatePaymentResponse ): void {
     console.log(response);
+  }
 }
 ```  
 
@@ -79,12 +80,12 @@ These are the possible objects that will be returned *successfully* from the ```
     customerTranRef: String,
     token: String,
     code: String,
-    message: String
+    message: String,
     status: Number,
-     cardMetaData: null | {
-        maskedPAN: String,
-        expirationDate: String,
-        billingZip: null | String
+    cardMetaData: null | {
+      maskedPAN: String,
+      expirationDate: String,
+      billingZip: null | String
     }
 }
 ```  
@@ -124,7 +125,8 @@ Below we have the complete API with examples of default values for each.
 | margin | wrapper | ```string``` or ```number``` | jss spacing units (rem, em, px, etc) | ```'1rem'``` | container margin |
 | padding | wrapper | ```string``` or ```number``` | jss spacing units (rem, em, px, etc) | ```'1rem'``` | container padding |
 | inputType | variants | ```string``` | ```"outlined", "filled", "standard"``` | ```"outlined"``` | template design for input boxes |
-| inputMargin | variants | ```string``` | ```"dense", "none", "normal"``` | ```"normal"``` | template padding & margins for input boxes |  
+| inputMargin | variants | ```string``` | ```"dense", "none", "normal"``` | ```"normal"``` | template padding & margins for input boxes | 
+| autoMinHeight | variants | ```boolean``` | ```boolean``` | ```false``` | ```true``` will maintain a static margin on each input box that will not grow with validation errors | 
   
 <br />
 
@@ -138,7 +140,8 @@ Below we have the complete API with examples of default values for each.
         },
         variants: {
             inputType: 'outlined',
-            inputMargin: 'normal'
+            inputMargin: 'normal',
+            autoMinHeight: false
         },
         backgroundColor: '#fff'
     }
@@ -175,7 +178,7 @@ Below we have the complete API with examples of default values for each.
 ```typescript
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { TeConnectNgModule } from '@magensa/te-connect-ng';
+import { TeConnectNgModule, TEConnect } from '@magensa/te-connect-ng';
 import { createTEConnect } from '@magensa/te-connect'
 
 import { AppComponent } from './app.component';
@@ -264,7 +267,7 @@ You may choose to hide the "ZIP Code" input field upon creating a TEConnect inst
 ```typescript
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { TeConnectNgModule } from '@magensa/te-connect-ng';
+import { TeConnectNgModule, TEConnect } from '@magensa/te-connect-ng';
 import { createTEConnect } from '@magensa/te-connect'
 
 import { AppComponent } from './app.component';
