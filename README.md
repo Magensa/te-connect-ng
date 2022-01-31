@@ -173,6 +173,25 @@ Below we have the complete API with examples of default values for each.
 }
 ```
 
+# TEConnect Options
+The second parameter of the ```createTEConnect``` method is an options object. This object is optional.
+| Property Name  | Input Type | Notes |
+|:--:|:--:|:--:|
+| billingZip | ```boolean``` | See [Optional Zip Code Implementation](#Example-Implementation-NoZip) |
+| tecPaymentRequest | ```TecPaymentRequestOptions``` | See the [Payment Request README for more info](TecPaymentRequestREADME.md) |
+| appleMerchantId | string | This property is part of a child object supplied to ```tecPaymentRequest```. Provide a valid ```appleMerchantId``` to [opt in for Apple Pay](TecPaymentRequestREADME.md) |
+
+```typescript
+type TecPaymentRequestOptions = {
+    appleMerchantId?: string
+}
+
+type CreateTEConnectOptions = {
+    hideZip?: boolean,
+    tecPaymentRequest?: TecPaymentRequestOptions
+}
+```
+
 # Example Implementation
 ```app.module.ts```
 ```typescript
