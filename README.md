@@ -124,6 +124,8 @@ Below we have the complete API with examples of default values for each.
 | backgroundColor | base | ```string``` | jss color (rgb, #, or color name) | ```"#fff"``` | container background color |
 | margin | wrapper | ```string``` or ```number``` | jss spacing units (rem, em, px, etc) | ```'1rem'``` | container margin |
 | padding | wrapper | ```string``` or ```number``` | jss spacing units (rem, em, px, etc) | ```'1rem'``` | container padding |
+| direction | wrapper | ```string``` | ```'row', 'row-reverse', 'column', 'column-reverse'``` | ```'row'``` | ```'flex-direction'``` style property |
+| flexWrap | wrapper | ```string``` | ```'wrap', 'wrap', 'wrap-reverse'``` | ```'wrap'``` | ```'flex-wrap'``` style property |
 | inputType | variants | ```string``` | ```"outlined", "filled", "standard"``` | ```"outlined"``` | template design for input boxes |
 | inputMargin | variants | ```string``` | ```"dense", "none", "normal"``` | ```"normal"``` | template padding & margins for input boxes | 
 | autoMinHeight | variants | ```boolean``` | ```boolean``` | ```false``` | ```true``` will maintain a static margin on each input box that will not grow with validation errors | 
@@ -136,7 +138,9 @@ Below we have the complete API with examples of default values for each.
     base: {
         wrapper: {
             margin: '1rem',
-            padding: '1rem'
+            padding: '1rem',
+            direction: 'row',
+            flexWrap: 'wrap'
         },
         variants: {
             inputType: 'outlined',
@@ -170,6 +174,25 @@ Below we have the complete API with examples of default values for each.
         errorColor: "#f44336",
         inputColor: "#fff"
     }
+}
+```
+
+# TEConnect Options
+The second parameter of the ```createTEConnect``` method is an options object. This object is optional.
+| Property Name  | Input Type | Notes |
+|:--:|:--:|:--:|
+| billingZip | ```boolean``` | See [Optional Zip Code Implementation](#Example-Implementation-NoZip) |
+| tecPaymentRequest | ```TecPaymentRequestOptions``` | See the [Payment Request README for more info](TecPaymentRequestREADME.md) |
+| appleMerchantId | string | This property is part of a child object supplied to ```tecPaymentRequest```. Provide a valid ```appleMerchantId``` to [opt in for Apple Pay](TecPaymentRequestREADME.md) |
+
+```typescript
+type TecPaymentRequestOptions = {
+    appleMerchantId?: string
+}
+
+type CreateTEConnectOptions = {
+    hideZip?: boolean,
+    tecPaymentRequest?: TecPaymentRequestOptions
 }
 ```
 
