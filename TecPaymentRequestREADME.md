@@ -1,6 +1,6 @@
 # TEConnect Payment Request (Angular)
 [![npm version](https://img.shields.io/npm/v/@magensa/te-connect-ng.svg?style=for-the-badge)](https://www.npmjs.com/package/@magensa/te-connect-ng "@magensa/te-connect-ng npm.js")  
-Angular components for use with Apple Pay via Token Exchange Connect.
+Angular components for use with Apple Pay and Google Pay via Token Exchange Connect.
 TypeScript Type Defs are exposed, and can be imported from this module as well.
 
 # Payment Request Platforms
