@@ -101,6 +101,9 @@ const exampleGoogleButtonOptions = {
 }
 ```
 
+## CSS Considerations
+When the ```lib-tec-payment-request``` component mounts a Google Pay button - it is wrapped in a ```<div>``` with the id of ```"te-connect-google-pay-wrapper"```.  You can use this target to style the wrapper around the Google Pay button, if needed.
+
 <br />
 
 # Google Pay Example Implementation
