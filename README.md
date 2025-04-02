@@ -506,11 +506,9 @@ export class AppModule {
 }
 ```
 
-//TODO:
 # TecThreeds (3DS) Manual Entry Example 
 TEConnect 3DS Manual Entry example below.  If using both Manual Entry and 3DS Manual Entry - ensure there is a condition in place that will only render one manual entry form (`<lib-te-connect-ng` or `lib-tec-threeds`).
 
-```app.module.ts```  
 ```typescript
 import { Component } from '@angular/core';
 import { createTEConnect } from '@magensa/te-connect';
@@ -523,7 +521,12 @@ import {
   TecThreeDsStatus
 } from '@magensa/te-connect-ng';
 
-const TE_CONNECT: TEConnect = createTEConnect("__publicKeyGoesHere__");
+const TE_CONNECT: TEConnect = createTEConnect("__publicKeyGoesHere__", {
+  threeds: {
+    threedsApiKey: '__3DS-API-Key-Goes-Here__'
+  }
+});
+
 const exampleThreedsConfig: ThreeDsConfigObj = {
     amount: 110,
     challengeNodeId: "example-challenge-node" /* ensure the node with the corresponding id is mounted on the DOM. Likely in a parent component. */
@@ -536,10 +539,10 @@ const exampleThreedsConfig: ThreeDsConfigObj = {
   template: `
     <lib-tec-threeds
         #tecThreeDs
-        (teResponse) = "handleTecResponse($event)"
         [teConnect] = "tecInstance"
-        [stylesConfig] = "myStyles"
         [threeDsConfig] = "tecThreeDsConfig"
+        (teResponse) = "handleTecResponse($event)"
+        [stylesConfig] = "myStyles"
         [threeDsStatus] = "exampleStatusListener"
     ></lib-tec-threeds>
 
@@ -598,4 +601,3 @@ export class AppModule {
   }
 }
 ```
-
