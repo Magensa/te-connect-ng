@@ -256,20 +256,20 @@ Listening to the `confirm-token` event is required to complete the workflow for 
 Apple Pay uses an event handler driven workflow. When users interact with the payment request form - there are several events that are fired.   
 [More details about Apple Pay listeners here](https://github.com/Magensa/te-connect-ng/blob/master/TecApplePayREADME.md#Apple-Pay-Listeners)
   
-### ```[confirmToken]``` Event
+### `[confirmToken]` Event
 This is the only event listener that is required to complete both workflows. This is the only event that can optionally contain an ```error``` property (in the case the payment was submitted, but was unsuccessful). Be sure to check for that property first, if it exists.  
 When listening to the ```confirmToken``` event - there will be up to two special properties to the event:
-- ```tokenDetails```
-    - ```type``` specifies the payment request platform in which the token was created.
-        - ```applePay``` or ```googlePay```.
-    - ```token``` will be the object needed to process transactions, using the payment token created during the current session.
-        - Pass the ```token``` to the appropriate MPPG operation, unaltered, for processing.
+- `tokenDetails`
+    - `type` specifies the payment request platform in which the token was created.
+        - `applePay` or `googlePay`.
+    - `token` will be the object needed to process transactions, using the payment token created during the current session.
+        - Pass the `token` to the appropriate MPPG operation, unaltered, for processing.
             - `ProcessTECApplePay` for ApplePay.
             - `ProcessGooglePay` for GooglePay.
     - ```error``` is only present in the case the token creation was unsuccessful.
 - ```completePayment```
     - This function will only exist for Apple Pay tokens. It is used to close the Apple Pay form with a status message. 
-        - [More information about ```completePayment``` can be found here](https://github.com/Magensa/te-connect-ng/blob/master/TecApplePayREADME.md#Apple-Pay-Listeners)
+        - [More information about ```completePayment``` can be found here](./TecApplePayREADME.md#Apple-Pay-Listeners)
         - This property will not exist for Google Pay tokens. This is one of the many ways to differentiate between which platform the user is using to complete the transaction. 
             
 ```confirmToken``` example: 
