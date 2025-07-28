@@ -102,7 +102,7 @@ Below is a table of available properties, and after that are examples.  Feed the
 | buttonRadius | `number` | See Google's [ButtonOptions](https://developers.google.com/pay/api/web/reference/request-objects#ButtonOptions) |
 | buttonRootNode | ```HTMLDocument or ShadowRoot``` | See Google's [ButtonOptions](https://developers.google.com/pay/api/web/reference/request-objects#ButtonOptions) |
 
-```javascript
+```typescript
 type GooglePayButtonTypes = "book" | "buy" | "checkout" | "donate" | "order" | "pay" | "plain" | "subscribe";
 
 type GooglePayButtonOptions = {
