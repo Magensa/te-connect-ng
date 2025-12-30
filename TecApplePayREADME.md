@@ -1,21 +1,22 @@
 # TEConnect Apple Pay (Angular)
-This document demonstrates the available options, using Apple Pay via TEConnect.  TEConnect currently offers a Manual Entry form, Apple Pay and Google Pay.  Your app may use one - or all of these platforms to collect a payment token.  The section below explains how opt-in works with TEConnect, for each available platform. The remainder of the document focuses on Apple Pay with TEConnect.
+This document demonstrates the available options, using Apple Pay via TEConnect.  TEConnect currently offers a Manual Entry form, 3DS Manual Entry, Apple Pay and Google Pay.  Your app may use one - or all of these platforms to collect a payment token.  The section below explains how opt-in works with TEConnect for Apple Pay specifically.  
+
+See [TecPaymentRequestREADME.md](./TecPaymentRequestREADME.md) for examples using both ApplePay and GooglePay.
 
 # Payment Request Opt-In
-```createTEConnect``` accepts a public key as the first argument. This public key is for [TEConnect Manual Entry](https://github.com/Magensa/te-connect-ng#Getting-Started).
+`createTEConnect` accepts a public key as the first argument. This public key is for [TEConnect Manual Entry](./README.md#Getting-Started), or [TEConnect 3DS Manual Entry](./README.md#TecThreeDs-3DS-Component).
 The second argument is the [TEConnect options](https://github.com/Magensa/te-connect-ng#TEConnect-Options) object.  
-Providing an ```appleMerchantId``` or a ```googleMerchantId``` to the ```tecPaymentRequest``` object is how to opt-in for each Payment Request Platform.  So providing an ```appleMerchantId``` is an opt-in for Apple Pay - and a ```googleMerchantId``` for Google Pay.  Example below.
+Providing an ```appleMerchantId``` or a ```googleMerchantId``` to the ```tecPaymentRequest``` object is how to opt-in for each Payment Request Platform.  So providing an ```appleMerchantId``` is an opt-in for Apple Pay.  Example below.
 
 ```javascript
 const TE_CONNECT: TEConnect = createTEConnect("__publicKeyGoesHere__", {
     tecPaymentRequest: {
         appleMerchantId: "__tecAppleMerchantId__"
-        googleMerchantId: "__googleMerchantId__",
     }
 });
 ```
 
-Opting in to one or more platform affects the way the Payment Request Object should be supplied to TEConnect - as well as the  [```CanMakePaymentsResult```](TecPaymentRequestREADME.md#CanMakePaymentsResult).
+Opting in to one or more platform affects the way the Payment Request Object should be supplied to TEConnect - as well as the  [```CanMakePaymentsResult```](./TecPaymentRequestREADME.md#CanMakePaymentsResult).
 
 Be aware that if you only opt-in for one platform (i.e. only an ```appleMerchantId``` is provided to ```createTEConnect```) - you may provide the payment request object for that specific platform.  In this case - the [Apple Pay](#Apple-Pay-Payment-Request-Object) can be provided as-is.  
 
@@ -30,22 +31,23 @@ const paymentRequestObject = {
 
 
 # Apple Pay Payment Request Object
-The Payment Request Object is required, in order to use the ```lib-tec-payment-request```. This object describes the form that the end-user will interact with.
+The Payment Request Object is required, in order to use the `TecPaymentRequestComponent` (selector: `lib-tec-payment-request`). This object describes the form that the end-user will interact with.
 This section will specifically address the [ApplePayPaymentRequest object](https://developer.apple.com/documentation/apple_pay_on_the_web/applepaypaymentrequest).
 - [Here is Apple's Documentation about the payment request object](https://developer.apple.com/documentation/apple_pay_on_the_web/applepaypaymentrequest)
+    - This is useful for understanding how to tailor the form to your specifications.
 - It is encouraged to read through Apple's documentation for all the options available to you to define your form.
 - Be aware that any inaccuracy in the payment request object will most likely throw a ```TypeError``` without a message. Any errors that come from Apple's javascript rarely have any messages attached to errors.
 
 Below is an example of a Payment Request object.  This is where your form is defined - so each customer's object will appear differently, depending on the customer's circumstances.
-```javascript
-const examplePaymentRequestObject = {
-    storeDisplayName: "TEConnect Example Store",
+```typescript
+const examplePaymentRequestObject: ApplePayPaymentRequest = {
+    storeDisplayName: "TEConnect Example Store",  /* required */
     applePayVersion: 3, //Default is 3, unless specified
-    currencyCode: "USD",
-    countryCode: "US",
-    supportedNetworks: ['visa', 'masterCard', 'amex', 'discover', 'jcb'],
-    merchantCapabilities: ['supports3DS'],
-    total: {
+    currencyCode: "USD",  /* required */
+    countryCode: "US", /* required */
+    supportedNetworks: ['visa', 'masterCard', 'amex', 'discover', 'jcb'], /* required */
+    merchantCapabilities: ['supports3DS'], /* required */
+    total: { /* required */
         label: "Test Transaction",
         amount: "1.00",
         type: "final"
@@ -102,20 +104,20 @@ const examplePaymentRequestObject = {
 ```  
 
 ## Apple Pay Listeners
-Listening to the ```confirm-token``` event is required to complete the workflow, but there are more events, for Apple Pay users, that may be optionally subscribed to.  
+Listening to the `confirm-token` event is required to complete the workflow, but there are more events, for Apple Pay users, that may be optionally subscribed to.  
 
 When [qualified Apple Pay users](#User-Requirements) interact with the Apple Pay form, there are several events that may be subscribed to. Each event will fire with an object (describing the event) and a function (to respond to the event). Be aware that _if_ an event is subscribed to - the response function _must_ be called with a response within 30 seconds - otherwise the form will timeout. The only exception to this is the ```cancelTransaction``` event - which only contains a message.  
 Examples of all the listeners can be found in the more complex of the [Example Implementations](#Example-Implementation)
 
 ### ```confirmToken``` Event
 This is the only event listener that is required to complete the Apple Pay workflow. This is the only event that can optionally contain an ```error``` property (in the case the payment was submitted, but was unsuccessful). Be sure to check for that property first, if it exists.  
-When listening to the ```confirmToken``` event - there will be two special properties to the event:
-- ```tokenDetails```
-    - ```type``` specifies the payment request platform in which the token was created.
-        - Currently ```applePay``` or ```googlePay```.
-    - ```token``` will be the object needed to process transactions, using the payment token created during the current session.
-        - Pass the ```token``` to the appropriate MPPG operation, unaltered, for processing.
-    - ```error``` is an optional property in the case the token creation was unsuccessful.
+When listening to the `confirmToken` event - there will be two special properties to the event:
+- `tokenDetails`
+    - `type` specifies the payment request platform in which the token was created.
+        - Currently `applePay` or `googlePay`.
+    - `token` will be the object needed to process transactions, using the payment token created during the current session.
+        - Pass the ```token``` to the appropriate MPPG operation, unaltered, for processing. In this case - `ProcessTECApplePay`.
+    - ```error``` is only present, in the case the token creation was unsuccessful.
 - ```completePayment```
     - Call this function within 30 seconds of receiving it - otherwise a timeout error will occur and close the Apple Pay form.
     - There are two possible value types to call this function with - either a string value, or an object:
@@ -147,19 +149,18 @@ import { examplePaymentRequestObject } from '../consts';
         (canMakePaymentsResult)="handleCanMakePaymentsResult($event)"
     ></lib-tec-payment-request>
   `,
-  styleUrls: ['./app.component.scss']
+  styleUrl: './app.component.scss'
 })
 export class AppComponent {
-
     prObject: ApplePayPaymentRequest = examplePaymentRequestObject;
 
-    handleCanMakePaymentsResult = (availablePrMethods: CanMakePaymentsResult) => {
+    handleCanMakePaymentsResult = (availablePrMethods: CanMakePaymentsResult) : void => {
         if (availablePrMethods) {
             //Positive CanMakePaymentsResult result
         }
     }
 
-    confirmPaymentToken = (tokenResp: ConfirmTokenEvent) => {
+    confirmPaymentToken = (tokenResp: ConfirmTokenEvent) : void => {
         const { tokenDetails, completePayment, error } = tokenResponse;
 
         if (error) {
@@ -184,8 +185,8 @@ export class AppComponent {
 }
 ```
 
-### ```paymentMethodSelection``` Event
-When listening to the ```paymentMethodSelection``` event - there will be two special properties to the event:
+### `paymentMethodSelection` Event
+When listening to the `paymentMethodSelection` event - there will be two special properties to the event:
 - ```paymentMethod```
     - This object will provide details about the currently selected payment method. If you subscribe to this event - it will fire at least once (when the payment form loads), and will fire every time the user changes the payment method (during the current session). You must call ```completePaymentMethodSelection``` within 30 seconds of receiving the event - or a timeout will occur and close the payment form.  
     - The object's structure is defined in [Apple's documentation here](https://developer.apple.com/documentation/apple_pay_on_the_web/applepaypaymentmethod).
@@ -241,46 +242,21 @@ When the ```lib-tec-payment-request``` component mounts an Apple Pay button - it
 <br />
 
 # Apple Pay Example Implementation
-The below implementation utilizes most of the Apple Pay features, for a more complex example. Your application's specific implementation will differ according to your needs.  
+The below implementation utilizes most of the Apple Pay features, for a more complex example. Your application's specific implementation will differ according to your needs.  [TecPaymentRequestREADME.md](./TecPaymentRequestREADME.md#Example-Implementation) has a more straightforward implementation using both ApplePay and GooglePay.
 
-```app.module.ts```
-```typescript
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { TeConnectNgModule, TEConnect } from '@magensa/te-connect-ng';
-import { createTEConnect } from '@magensa/te-connect'
-
-import { AppComponent } from './app.component';
-
-const TE_CONNECT: TEConnect = createTEConnect("__publicKeyGoesHere__", {
-    tecPaymentRequest: {
-        appleMerchantId: "__tecAppleMerchantId__"
-    }
-});
-
-@NgModule({
-  declarations: [AppComponent],
-  imports: [
-    BrowserModule,
-    TeConnectNgModule.forRoot(TE_CONNECT)
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
-})
-export class AppModule { }
-```
-
-```app.component.ts```
 ```typescript
 import { Component } from '@angular/core';
-import { CanMakePaymentsResult } from 'dist/te-connect-ng/lib/consts/paymentRequestTypeDefs';
+import { createTEConnect } from '@magensa/te-connect';
 import { 
+    TEConnect,
+    TecPaymentRequestComponent,
     ApplePayPaymentRequest, 
     ConfirmTokenListener,
     PaymentMethodListener,
     ShippingMethodListener,
     ShippingContactListener,
     CancelListener,
+    CanMakePaymentsResult,
     ConfirmTokenEvent,
     PaymentMethodEvent,
     ShippingMethodEvent,
@@ -292,13 +268,23 @@ import {
     ApplePayShippingContactUpdate,
     TecPaymentRequestOptions
 } from 'te-connect-ng';
-
 import { examplePaymentRequestObject } from './consts';
+
+
+const TE_CONNECT: TEConnect = createTEConnect("__publicKeyGoesHere__", {
+    tecPaymentRequest: {
+        appleMerchantId: "__tecAppleMerchantId__"
+        googleMerchantId: "__googleMerchantId__",
+    }
+});
+
 
 @Component({
   selector: 'app-root',
+  imports: [ TecPaymentRequestComponent ],
   templateUrl: `
     <lib-tec-payment-request
+        [teConnect] = "tecInstance"
         [paymentRequestObject] = "prObject"
         [confirmToken] = "confirmPaymentToken"
         [cancelTransaction] = "cancelTrx"
@@ -306,14 +292,13 @@ import { examplePaymentRequestObject } from './consts';
         [paymentMethodSelection] = "paymentMethodHandler"
         [shippingContactUpdate] = "shippingContactHandler"
         [tecPaymentRequestOptions] = "tecPrOptions"
-        (canMakePaymentsResult)="handleCanMakePaymentsResult($event)"
-
-
+        (canMakePaymentsResult) = "handleCanMakePaymentsResult($event)"
     ></lib-tec-payment-request>
   `,
-  styleUrls: ['./app.component.scss']
+  styleUrl: './app.component.css'
 })
 export class AppComponent {
+    tecInstance = TE_CONNECT;
     isAppleUser: boolean = false;
     prObject: ApplePayPaymentRequest = examplePaymentRequestObject;
 
@@ -491,30 +476,39 @@ To that end - if you plan to provide Apple Pay specific errors - ensure the code
 
 ```javascript
 import { Component } from '@angular/core';
-import { CanMakePaymentsResult } from 'dist/te-connect-ng/lib/consts/paymentRequestTypeDefs';
 import { 
     ApplePayPaymentRequest, 
     TecPaymentRequestError,
+    TecPaymentRequestComponent,
+    CanMakePaymentsResult
 } from 'te-connect-ng';
-
 import { examplePaymentRequestObject } from './consts';
+
+const TE_CONNECT: TEConnect = createTEConnect("__publicKeyGoesHere__", {
+    tecPaymentRequest: { appleMerchantId: "__tecAppleMerchantId__" }
+});
 
 @Component({
   selector: 'app-root',
+  imports: [ TecPaymentRequestComponent ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+    tecInstance = TE_CONNECT;
     isAppleUser: boolean = false;
     prObject: ApplePayPaymentRequest = examplePaymentRequestObject;
-    
 
     handleCanMakePaymentsResult = (availablePrMethods: CanMakePaymentsResult) => {
         if (availablePrMethods && availablePrMethods.applePay) {
             //User is using Safari and has ApplePay capabilities (Wallet), with an active card loaded on their device.
             this.isAppleUser = true;
 
-            const exampleAppleSpecificError: TecPaymentRequestError = new window['ApplePayError']("shippingContactInvalid", "postalCode", "ZIP Code is invalid");
+            const exampleAppleSpecificError: TecPaymentRequestError = new window['ApplePayError'](
+                "shippingContactInvalid", 
+                "postalCode", 
+                "ZIP Code is invalid"
+            );
         }
     }
 }
